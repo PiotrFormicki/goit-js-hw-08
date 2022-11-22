@@ -13,6 +13,9 @@
 //dać throttle do eventlistenera od zapisywania inputa
 import { throttle } from 'lodash';
 const feedbackForm = document.querySelector('.feedback-form');
+const submitButton = document.getElementById('amazing');
+const messageInput = document.getElementById('message-input');
+const emailInput = document.getElementById('email-input');
 let userData = {
   email: '',
   message: '',
@@ -42,6 +45,8 @@ const submitFunction = event => {
     try {
       const currentData = JSON.parse(getUserData);
       console.log(`User data: `, currentData);
+      localStorage.clear();
+      feedbackForm.reset();
     } catch (error) {
       console.log(error.name);
       console.log(error.message);
@@ -67,3 +72,23 @@ const loadPage = () => {
   }
 };
 window.addEventListener('load', loadPage); //event listener na window a nie form, bo to ono jest przeładowywane
+
+const magicHappensHereISwear = () => {
+  if (
+    feedbackForm.elements.message.value === '' ||
+    feedbackForm.elements.email.value === ''
+  ) {
+    submitButton.style.display = 'none';
+  } else {
+    submitButton.style.display = 'block';
+  }
+}; //dla submit
+
+//dla message oraz email
+const resetMagicPls = () => {
+  submitButton.style.display = 'block';
+};
+messageInput.addEventListener('mouseover', resetMagicPls);
+emailInput.addEventListener('mouseover', resetMagicPls);
+submitButton.addEventListener('mouseover', magicHappensHereISwear);
+//teraz na pewno nie da się submitować przy obu pustych polach :D

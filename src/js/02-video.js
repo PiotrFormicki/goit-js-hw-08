@@ -20,9 +20,10 @@ const getLocalLastTime = () => {
   const defaultTime = 0;
   try {
     const locallySavedTime = localStorage.getItem('videoplayer-current-time');
-    if (!locallySavedTime) return defaultTime; //zresetuj czas ogladania
-
-    const parsedTime = JSON.parse(locallySavedTime); // string
+    const parsedTime = JSON.parse(locallySavedTime);
+    if (!locallySavedTime || parsedTime >= 571.52) return defaultTime; //zresetuj czas ogladania
+    //jesli cały film został obejrzany*
+    // string
     return Number(parsedTime); //string na number
   } catch (error) {
     console.log({ error });
