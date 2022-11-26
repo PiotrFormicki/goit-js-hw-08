@@ -1,16 +1,3 @@
-//Rozklad jazdy:
-//import throttle
-//zadeklarowac wszystko co trzeba
-//stworzyc obiekt zawierajacy wszystkie dane tj. email, message
-//funkcja ktora zapisuje wszystko w formie, wykonsolować ją, json stringify i setItem na local storage
-//funkcja do submit event
-//jakiś if gdyby cymbał zostawił puste pola, a jesli git to wyczyscic elementy forma
-//catch error i konsol log dla .name i .message
-//przeładuj strone i pobierz wartosci z local storage
-//te wartosci .parse
-//jesli zwracają null to return
-//a jesli git to email.value=parsowaneInformacje.email/message
-//dać throttle do eventlistenera od zapisywania inputa
 import { throttle } from 'lodash';
 const feedbackForm = document.querySelector('.feedback-form');
 const submitButton = document.getElementById('amazing');
@@ -27,10 +14,17 @@ const saveUserData = () => {
   };
   console.log(userData);
   localStorage.setItem('feedback-form-state', JSON.stringify(userData));
-}; //zapisz w localstorage userData, konwersja na json
-feedbackForm.addEventListener('input', throttle(saveUserData, 500)); //pobiera dane raz na pol sekundy, sprawdzilem
-//teraz submit
+};
 
+//zapisz w localstorage userData, konwersja na json
+feedbackForm.addEventListener('input', throttle(saveUserData, 500)); //pobiera dane raz na pol sekundy, sprawdzilem
+const disableButtonIfEmpty = () => {
+  if (messageInput.value !== '' && emailInput.value !== '') {
+    submitButton.disabled = false;
+  }
+};
+messageInput.addEventListener('input', disableButtonIfEmpty);
+emailInput.addEventListener('input', disableButtonIfEmpty);
 const getUserData = localStorage.getItem('feedback-form-state');
 
 const submitFunction = event => {
@@ -38,21 +32,22 @@ const submitFunction = event => {
 
   if (
     feedbackForm.elements.email.value === '' ||
-    feedbackForm.elements.email.value === ''
+    feedbackForm.elements.message.value === ''
   ) {
     alert`Please fill all the gaps!`;
+    return;
   } else {
     try {
-      const currentData = JSON.parse(getUserData);
-      console.log(`User data: `, currentData);
-      localStorage.clear();
+      console.log(`User data: `, userData);
       feedbackForm.reset();
+      localStorage.clear();
     } catch (error) {
       console.log(error.name);
       console.log(error.message);
     }
   }
 };
+
 feedbackForm.addEventListener('submit', submitFunction);
 // load event
 const loadPage = () => {
@@ -78,17 +73,9 @@ const magicHappensHereISwear = () => {
     feedbackForm.elements.message.value === '' ||
     feedbackForm.elements.email.value === ''
   ) {
-    submitButton.style.display = 'none';
+    submitButton.disabled = true;
   } else {
-    submitButton.style.display = 'block';
+    submitButton.disabled = false;
   }
-}; //dla submit
-
-//dla message oraz email
-const resetMagicPls = () => {
-  submitButton.style.display = 'block';
 };
-messageInput.addEventListener('mouseover', resetMagicPls);
-emailInput.addEventListener('mouseover', resetMagicPls);
 submitButton.addEventListener('mouseover', magicHappensHereISwear);
-//teraz na pewno nie da się submitować przy obu pustych polach :D
