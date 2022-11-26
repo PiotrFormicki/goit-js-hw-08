@@ -1,8 +1,8 @@
 import { throttle } from 'lodash';
 const feedbackForm = document.querySelector('.feedback-form');
-const submitButton = document.getElementById('amazing');
-const messageInput = document.getElementById('message-input');
-const emailInput = document.getElementById('email-input');
+const submitButton = document.querySelector('button[type="submit"]');
+const messageInput = document.querySelector('textarea[name="message"]');
+const emailInput = document.querySelector('input[type="email"]');
 let userData = {
   email: '',
   message: '',
